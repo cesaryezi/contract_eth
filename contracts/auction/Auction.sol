@@ -182,7 +182,7 @@ contract Auction is Initializable, OwnableUpgradeable, UUPSUpgradeable, IAuction
     function convertEthToUsd(uint256 ethAmount) public view returns (uint256) {
         (, int256 answer, , ,) = ethUsdDataFeed.latestRoundData();
         require(answer > 0, "Invalid ETH price");
-        return ethAmount * uint256(answer) / (10 ** 8);
+        return ethAmount * uint256(answer) / (10 ** 8);//  ETH/USD 精度为8
     }
 
     function convertTokenToUsd(address token, uint256 tokenAmount) public view returns (uint256) {
@@ -192,6 +192,6 @@ contract Auction is Initializable, OwnableUpgradeable, UUPSUpgradeable, IAuction
         (, int256 answer, , ,) = feed.latestRoundData();
         require(answer > 0, "Invalid token price");
 
-        return tokenAmount * uint256(answer) / (10 ** 8);
+        return tokenAmount * uint256(answer) / (10 ** 8); // 假定 TOKEN/USD 精度为8
     }
 }
