@@ -1,0 +1,1 @@
+exports.deployNFT = require("./deploy-nft")
