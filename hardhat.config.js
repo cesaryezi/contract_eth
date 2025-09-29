@@ -5,6 +5,7 @@ require("./tasks")
 require("hardhat-deploy")
 require("@nomicfoundation/hardhat-ethers");
 require("hardhat-deploy-ethers");
+require("@openzeppelin/hardhat-upgrades");
 
 
 const SEPOLIA_URL = process.env.SEPOLIA_URL

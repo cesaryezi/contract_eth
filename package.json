@@ -20,10 +20,11 @@
     "hardhat": "^2.22.5",
     "hardhat-deploy": "^0.12.4",
     "hardhat-deploy-ethers": "^0.4.2",
-    "hardhat-gas-reporter": "^2.3.0"
+    "hardhat-gas-reporter": "^1.0.8"
   },
   "dependencies": {
     "@chainlink/contracts-ccip": "^1.4.0",
-    "@openzeppelin/contracts-upgradeable": "^5.4.0"
+    "@openzeppelin/contracts-upgradeable": "^5.4.0",
+    "@openzeppelin/hardhat-upgrades": "^3.9.1"
   }
 }

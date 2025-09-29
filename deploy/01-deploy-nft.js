@@ -21,7 +21,7 @@ module.exports = async ({getNamedAccounts, deployments}) => {
 
     await deploy("NFT", {
         from: firstAccount,
-        args: ["MyNFT", "ZJC"],
+        args: ["MyNFT", "MIT"],
         log: true,
         // waitConfirmations: CONFIRMATIONS //等待5个区块确认
     })
@@ -30,7 +30,7 @@ module.exports = async ({getNamedAccounts, deployments}) => {
     console.log("Waiting for block confirmations...");
     await nft.deployTransaction().wait(5);
     //verify
-    await verify(nft.target, ["MyNFT","ZJC"])
+    await verify(nft.target, ["MyNFT","MIT"])
 } else {
     console.log("Not on sepolia network. No need to verify");
 }*/

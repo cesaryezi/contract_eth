@@ -5,6 +5,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {Auction} from "./Auction.sol";
 
 contract AuctionFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
@@ -22,9 +23,9 @@ contract AuctionFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     );
 
 
-    constructor() {
+   /* constructor() {
         _disableInitializers();
-    }
+    }*/
 
     //UUPS升级模式下的初始化函数
     function initialize(address _auctionImplementation, address _ethUsdFeed) public initializer {
@@ -52,10 +53,13 @@ contract AuctionFactory is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         require(nft.ownerOf(_nftTokenId) == msg.sender, "Not owner of NFT");
         nft.transferFrom(msg.sender, address(this), _nftTokenId);
 
-        // 部署新的拍卖合约
-        address auction = address(new Auction());
+        // 使用克隆模式
+        address auction = Clones.clone(auctionImplementation);
 
-        // 初始化拍卖合约
+        // 部署新的拍卖合约
+        //address auction = address(new Auction());
+
+        // 初始化 克隆拍卖合约
         Auction(auction).initialize(
             _nftContract,
             _nftTokenId,

@@ -7,7 +7,7 @@ async function main(){
     const factoryNFT = await ethers.getContractFactory("NFT");
     console.log("Deploying NFT...");
     //deploy  contract from  factory
-    const nft = await factoryNFT.deploy("MyNFT","ZJC");
+    const nft = await factoryNFT.deploy("MyNFT","MIT");
     await nft.waitForDeployment();
     console.log("NFT deployed to:", nft.target);
 
@@ -15,7 +15,7 @@ async function main(){
         console.log("Waiting for block confirmations...");
         await nft.deployTransaction().wait(5);
         //verify
-        await verify(nft.target, ["MyNFT","ZJC"])
+        await verify(nft.target, ["MyNFT","MIT"])
     } else {
         console.log("Not on sepolia network. No need to verify");
     }*/

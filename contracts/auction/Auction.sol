@@ -36,9 +36,9 @@ contract Auction is Initializable, OwnableUpgradeable, UUPSUpgradeable, IAuction
     event Withdrawal(Bid _bid);
 
     // 工厂创建拍卖时调用
-    constructor() {
+    /*constructor() {
         _disableInitializers();
-    }
+    }*/
 
     // 工厂创建拍卖后 调用initialize实例化
     function initialize(

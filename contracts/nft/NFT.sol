@@ -27,12 +27,12 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Owna
         return tokenId;
     }
 
-    function safeMintTo(address to, string memory _tokenURI) external onlyOwner returns (uint256) {
+    /*function safeMintTo(address to, string memory _tokenURI) external onlyOwner returns (uint256) {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, _tokenURI);
         return tokenId;
-    }
+    }*/
 
     // The following functions are overrides required by Solidity.
 
