@@ -23,7 +23,7 @@ module.exports = async ({getNamedAccounts, deployments}) => {
         from: firstAccount,
         args: ["MyNFT", "ZJC"],
         log: true,
-        waitConfirmations: CONFIRMATIONS //等待5个区块确认
+        // waitConfirmations: CONFIRMATIONS //等待5个区块确认
     })
 
     /*if (hre.network.config.chainId === 1115515 && process.env.ETHERSCAN_API_KEY) {

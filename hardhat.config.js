@@ -3,6 +3,8 @@ require("@chainlink/env-enc").config()
 // require("./tasks/deploy-nft.js")
 require("./tasks")
 require("hardhat-deploy")
+require("@nomicfoundation/hardhat-ethers");
+require("hardhat-deploy-ethers");
 
 
 const SEPOLIA_URL = process.env.SEPOLIA_URL
@@ -13,6 +15,9 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 module.exports = {
     solidity: "0.8.28",
     defaultNetwork: "hardhat",//默认hardhat
+    mocha: {
+        timeout: 300000
+    },
     networks: {
         sepolia: {
             url: SEPOLIA_URL,
@@ -33,7 +38,13 @@ module.exports = {
     namedAccounts: {
         firstAccount: {
             default: 0
+        },
+        secondAccount: {
+            default: 1
         }
     },
+    gasReporter: {
+        enabled: true
+    }
 
 };
