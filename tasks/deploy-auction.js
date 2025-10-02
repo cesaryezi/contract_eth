@@ -1,7 +1,6 @@
 const {task} = require("hardhat/config")
 // const {ethers} = require("hardhat");
 
-
 task("deploy-auction", "deploy auction contract").setAction(async(taskArgs, hre) => {
     // 1 Auction Impl
     const Auction = await ethers.getContractFactory("Auction");

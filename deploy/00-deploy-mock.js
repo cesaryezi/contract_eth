@@ -11,11 +11,28 @@ module.exports= async({getNamedAccounts, deployments}) => {
         const {firstAccount} = await getNamedAccounts()
         const {deploy} = deployments
 
+
+        await deploy("MyToken", {
+            from: firstAccount,
+            args: [firstAccount],
+            log: true,
+            // waitConfirmations: CONFIRMATIONS //等待5个区块确认
+        })
+
         await deploy("MockV3Aggregator",{
             from: firstAccount,
             args: [DECIMAL, INITIAL_ANSWER],
             log: true
         })
+
+        // 部署 TOKEN/USD 价格预言机
+        await deploy("TokenUsdPriceFeed", {
+            from: firstAccount,
+            contract: "MockV3Aggregator", // 指定使用 MockV3Aggregator 合约
+            args: [DECIMAL, INITIAL_ANSWER], // 例如: [8, 100000000] 表示 $1
+            log: true
+        })
+
     } else {
         console.log("environment is not local, mock contract depployment is skipped")
     }

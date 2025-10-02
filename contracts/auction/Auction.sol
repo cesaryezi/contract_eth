@@ -129,6 +129,7 @@ contract Auction is Initializable, OwnableUpgradeable, UUPSUpgradeable, IAuction
         highestBid = tokenAmount;
         isEthBid = false;
 
+
         emit HighestBidIncreased(Bid(msg.sender, tokenAmount, false, block.timestamp));
     }
 
@@ -137,7 +138,7 @@ contract Auction is Initializable, OwnableUpgradeable, UUPSUpgradeable, IAuction
         require(!ended, "Auction already ended");
 
         ended = true;
-        //address(0) 表示零地址（也称为空地址或无效地址）。
+        //address(0) 表示零地址（也称为空地址或无效地址）:表示ETH地址，否则表示是ERC20的资产
         if (highestBidder != address(0)) {
             // 转移 NFT 给获胜者
             IERC721(nftContract).transferFrom(address(this), highestBidder, nftTokenId);
