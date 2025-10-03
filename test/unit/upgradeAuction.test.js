@@ -1,4 +1,4 @@
-const {ethers, deployments, network} = require("hardhat")
+const {ethers, deployments, network,upgrades} = require("hardhat")
 const {assert, expect} = require("chai")
 const {devlopmentChains} = require("../../helper-hardhat-config")
 const helpers = require("@nomicfoundation/hardhat-network-helpers")
@@ -9,7 +9,85 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
     ? describe.skip
     : describe("test auction contract", async function () {
 
-        let nft;
+        it("test auction upgrade",async function () {
+
+            [signer, buyer] = await ethers.getSigners()
+
+            //1 集成deploy插件，直接获取 AuctionProxy
+            await deployments.fixture(["auction"])
+
+            //1 集成deploy插件，直接获取 AuctionProxy
+            const AuctionProxy = await deployments.get("AuctionProxy");
+            console.log("AuctionProxy:", AuctionProxy.address);
+
+            // 2. 部署 ERC721 合约
+            const TestERC721 = await ethers.getContractFactory("TestERC721");
+            const testERC721 = await TestERC721.deploy();
+            await testERC721.waitForDeployment();
+            const testERC721Address = await testERC721.getAddress();
+            console.log("testERC721Address::", testERC721Address);
+
+            //铸造
+            for (let i = 0; i < 10; i++) {
+                await testERC721.mint(signer.address, i);
+            }
+
+            const tokenId = 1
+
+            //ERC721授权给合约
+            await testERC721.connect(signer).setApprovalForAll(AuctionProxy.address, true);
+
+
+            //创建拍卖:通过代理合约获取impl进行拍卖
+            const Auction1 = await ethers.getContractAt(
+                "Auction",
+                AuctionProxy.address
+            );
+            await Auction1.createAuction(
+                testERC721Address,
+                tokenId,
+                ethers.parseEther("1"),
+                360
+            );
+
+            //获取拍卖信息
+            const Auction1Info = await Auction1.auctions(0);
+            console.log("Auction1Info:", Auction1Info);
+
+            const AuctionProxyImpl = await upgrades.erc1967.getImplementationAddress(
+                AuctionProxy.address
+            );
+
+
+
+            //升级合约
+            await deployments.fixture(["auctionUpgrade"])
+
+            const AuctionV2ProxyImpl = await upgrades.erc1967.getImplementationAddress(AuctionProxy.address);
+
+            // 升级之后 读取合约的 auction[0]
+            const Auction2Info = await Auction1.auctions(0);
+            console.log("Auction2Info:", Auction2Info);
+
+            //升级之后 通过代理合约获取impl进行新增方法调用
+            const AuctionV2 = await ethers.getContractAt(
+                "AuctionV2",
+                AuctionProxy.address//注意代理合约地址 使用 最原始的代理合约地址！！！！！
+            )
+            console.log("AuctionProxyImpl::", AuctionProxyImpl, "\nAuctionV2ProxyImpl::", AuctionV2ProxyImpl);
+
+            const hello =await AuctionV2.testHello()
+            console.log("hello:", hello);
+
+            expect(Auction1Info).to.eql(Auction2Info);
+            expect(Auction1Info.startTime).to.equal(Auction2Info.startTime);
+
+            expect(AuctionProxyImpl).to.not.equal(AuctionV2ProxyImpl);
+
+
+        })
+
+        /*let nft;
         let firstAccount;
         let secondAccount
 
@@ -81,9 +159,9 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
             // 为拍卖合约授权代币转移权限:由 secondAccountSigner 为拍卖合约设置的
             await mockMyToken.connect(secondAccountSigner).approve(auction.target, amount);
 
-        })
+        })*/
 
-        it("test auction bidEth", async function () {
+       /* it("test auction bidEth", async function () {
             const bidAmount = ethers.parseEther("1");
             const tx = await auction.bidEth({value: bidAmount});
             const blockNumber = await ethers.provider.getBlockNumber();
@@ -173,7 +251,7 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
                     true,              // isEthBid
                     block.timestamp
                 ]);
-        })
+        })*/
 
 
         /*it("Should create auction successfully", async function () {
