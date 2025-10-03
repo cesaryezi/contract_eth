@@ -12,14 +12,14 @@ task("deploy-auction", "deploy auction contract").setAction(async(taskArgs, hre)
 
 
     // 2 Auction  Factory
-    const AuctionFactory = await ethers.getContractFactory("AuctionFactory");
+    /*const AuctionFactory = await ethers.getContractFactory("AuctionFactory");
     console.log("Deploying AuctionFactory...");
     const factory = await upgrades.deployProxy(AuctionFactory, [
         auctionImpl.target,
         "0x694AA1769357215DE4FAC081bf1f309aDC325306" // Sepolia ETH/USD feed
     ], {initializer: 'initialize'});
     await factory.waitForDeployment();
-    console.log("AuctionFactory deployed to:", factory.target);
+    console.log("AuctionFactory deployed to:", factory.target);*/
 
 } )
 
