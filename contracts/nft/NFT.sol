@@ -9,7 +9,7 @@ import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/
 
 contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     string constant public METADATA_URI = "ipfs://QmfHrCeiFRVXYqiDrHeAYumuabkyAX5MTTs51LjuUeRf8n";
-    uint256 private _nextTokenId;
+    uint256 private _nextTokenId = 1;
 
     constructor(string memory tokenName, string memory tokenSymbol)
     ERC721(tokenName, tokenSymbol)

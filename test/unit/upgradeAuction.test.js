@@ -5,7 +5,7 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
 
 //一般涉及资产转移的都需要 写 测试用例
 //npx hardhat coverage 可以查看单元测试覆盖率
-!devlopmentChains.includes(network.name)
+devlopmentChains.includes(network.name)
     ? describe.skip
     : describe("test auction contract", async function () {
 

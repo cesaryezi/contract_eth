@@ -50,6 +50,10 @@ module.exports = async ({getNamedAccounts, deployments}) => {
 
     //保存数据 到本地
     const storePath = path.resolve(__dirname, "./.cache/auctionProxy.json")
+    //先删除
+    if (fs.existsSync(storePath)) {
+        fs.unlinkSync(storePath)
+    }
     fs.writeFileSync(
         storePath,
         JSON.stringify({

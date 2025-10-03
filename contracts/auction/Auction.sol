@@ -94,7 +94,7 @@ contract Auction is Initializable, /*OwnableUpgradeable, */UUPSUpgradeable, IAuc
             "Auction has ended"
         );
         //是否是最高价自己在出价
-        require(auction.highestBidder != msg.sender, "You are already the highest bidder");
+//        require(auction.highestBidder != msg.sender, "You are already the highest bidder");
         //ETH和ERC20出价是否高于当前最高价：amount = msg.value
         uint256 payPrice;
         if (_tokenAddress == address(0)) {//ETH

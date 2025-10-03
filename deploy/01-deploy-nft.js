@@ -54,4 +54,4 @@ module.exports = async ({getNamedAccounts, deployments}) => {
     }
 }*/
 
-module.exports.tags = ["all", "NFT"]
+module.exports.tags = ["all", "NFT", "auction"]

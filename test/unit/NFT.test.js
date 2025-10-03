@@ -40,7 +40,7 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
 
         it("test if the nft can be minted successfully", async function () {
             await nft.safeMint(firstAccount)
-            const owner = await nft.ownerOf(0)
+            const owner = await nft.ownerOf(1)
             expect(owner).to.equal(firstAccount)
         })
 
