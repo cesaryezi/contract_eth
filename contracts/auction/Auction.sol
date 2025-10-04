@@ -144,6 +144,7 @@ contract Auction is Initializable, /*OwnableUpgradeable, */UUPSUpgradeable, IAuc
         //修改标志位
         auction.ended = true;
         //转移NFT给拍卖highestBidder
+        //IERC721接口没有 构造函数，但是在使用时必须 使用 IERC721(auction.nftContract)，他里面的方法必须是 external
         IERC721(auction.nftContract).safeTransferFrom(address(this), auction.highestBidder, auction.tokenId);
         //ETH/ERC20转移 到 卖家
         if (auction.tokenAddress == address(0)) {//ETH

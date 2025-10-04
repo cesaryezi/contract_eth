@@ -140,6 +140,17 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
 
             //等待100秒，结束拍卖
             //await new Promise((resolve) => setTimeout(resolve, 100 * 1000));
+
+            //多个异步任务并行执行（如发多个交易）：
+            // await Promise.all([
+            //   contract.connect(user1).mint(),
+            //   contract.connect(user2).mint()
+            // ]);
+
+            //常用工具函数（from Ethers.js）
+            // ethers.parseEther("1.0")     // 把 1 ETH 转成 wei
+            // ethers.formatEther("1000000000000000000") // wei 转 ETH
+            // ethers.AddressZero       // 0x000...000
             await helpers.time.increase(100);
             const tx3 = await Auction.connect(signer).endAuction(0)
             await tx3.wait()
