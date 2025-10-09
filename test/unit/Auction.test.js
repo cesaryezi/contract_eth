@@ -22,7 +22,6 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers")
         // 修改 beforeEach 钩子中的代码
         beforeEach(async function () {
 
-
             firstAccount = (await getNamedAccounts()).firstAccount
             secondAccount = (await getNamedAccounts()).secondAccount
 
