@@ -80,7 +80,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
     function withdrawLiquidityPoolReward() external {
         uint256 reward = liquidityProviderRewards[msg.sender];
         liquidityProviderRewards[msg.sender] = 0;
-        _update(address(this), msg.sender, reward);
+        _transfer(address(this), msg.sender, reward);
         emit RewardClaimed(msg.sender, reward);
     }
     //移除流动性
