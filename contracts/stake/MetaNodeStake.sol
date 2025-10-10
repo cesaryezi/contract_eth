@@ -44,7 +44,6 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
     //pid => userAddress => UserInfo
     mapping(uint256 => mapping(address => User)) public user;
 
-
     //合约事件
     event AddPool(address indexed stTokenAddress, uint256 indexed poolWeight, uint256 indexed lastRewardBlock, uint256 minDepositAmount, uint256 unstakeLockedBlocks);
 
