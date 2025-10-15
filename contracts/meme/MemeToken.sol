@@ -6,6 +6,7 @@ import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC2
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 
+//基础功能：交易税，提取流动性 奖励税[只考虑ETH，先不考虑ERC20代币的LP和奖励]，日交易限制
 contract MemeToken is ERC20, ERC20Burnable, Ownable {
 
     using Math for uint256;

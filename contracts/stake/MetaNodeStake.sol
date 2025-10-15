@@ -259,8 +259,9 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
     //获取用户待提取的代币数量:要提取的代币数量 , 待提取的代币数量(之前待提取的代币数量)
     function withdrawAmount(uint256 _pid, address _user) public checkPid(_pid) view returns (uint256 _requestAmount, uint256 _pendingWithdrawAmount) {
         User storage user_ = user[_pid][_user];
+        uint256 reqLen = user_.requests.length;
 
-        for (uint256 i = 0; i < user_.requests.length; i++) {
+        for (uint256 i = 0; i < reqLen; i++) {
             // 判断是否可以提取
             if (user_.requests[i].unLockStakeBlocks <= block.number) {
                 _pendingWithdrawAmount = _pendingWithdrawAmount + user_.requests[i].amount;
