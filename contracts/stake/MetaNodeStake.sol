@@ -241,7 +241,7 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
             //计算 区间块 的奖励
             uint256 multiplier = getMultiplier(pool_.lastRewardBlock, _blockNumber);
             //根据池子权重换算 区间块的奖励：区间块的奖励 * 池子权重 / 总权重
-            uint256 MetaNodeForPool = Math.mulDiv(multiplier, pool_.poolWeight, totalPoolWeight);
+            uint256 MetaNodeForPool = multiplier.mulDiv(pool_.poolWeight, totalPoolWeight);
 
             //池子每份代币的奖励 = 池子每份代币的奖励ori + 池子权重中区间块的奖励 / 池子代币供应量
             accMetaNodePerST = accMetaNodePerST + MetaNodeForPool * (1 ether) / stSupply;

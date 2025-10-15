@@ -35,7 +35,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
     constructor(string memory name, string memory symbol) ERC20(name, symbol) Ownable (msg.sender){
         _mint(msg.sender, 1000000 * 10 ** decimals());
         transactionTaxReceiver = msg.sender;
-        (, maxTransactionAmount) = Math.tryDiv(totalSupply(), 100);
+        (, maxTransactionAmount) = totalSupply().tryDiv(100);
         excludedTransactionTax[msg.sender] = true;
         excludedTransactionTax[address(this)] = true;
     }
@@ -72,7 +72,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
     //添加流动性 流动的奖励
     function addLiquidityPool() external payable {
         require(msg.value > 0, "Invalid amount");
-        uint256 reward = Math.mulDiv(msg.value, liquidityPoolTaxRate, TAX_DENOMINATOR);
+        uint256 reward = msg.value.mulDiv(liquidityPoolTaxRate, TAX_DENOMINATOR);
         liquidityProviderRewards[msg.sender] += reward;
         emit LiquidityAdded(msg.sender, 0, msg.value);
     }
@@ -102,7 +102,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
 
         //2 检查代币税
         if (!excludedTransactionTax[from] && !excludedTransactionTax[to] && transactionTaxRate > 0) {
-            uint256 taxAmount = Math.mulDiv(value, transactionTaxRate, TAX_DENOMINATOR);
+            uint256 taxAmount = value.mulDiv(transactionTaxRate, TAX_DENOMINATOR);
             uint256 transferAmount = value - taxAmount;
             // 再处理实际转账部分
             super._update(from, to, transferAmount);
