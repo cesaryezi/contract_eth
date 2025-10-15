@@ -12,7 +12,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
 
     //代币税功能:交易税
     uint256 public  transactionTaxRate = 5;
-    uint256 public constant TAX_DENOMINATOR = 1000;
+    uint256 public constant TAX_DENOMINATOR = 1000;//千分之 5
 
     address public  transactionTaxReceiver;
     mapping(address => bool) public excludedTransactionTax;
@@ -25,7 +25,7 @@ contract MemeToken is ERC20, ERC20Burnable, Ownable {
 
     //代币税功能:流动性税
     mapping(address => uint256) public liquidityProviderRewards;
-    uint256 public liquidityPoolTaxRate = 5;
+    uint256 public liquidityPoolTaxRate = 5;//千分之 5
 
     event LiquidityAdded(address indexed provider, uint256 tokenAmount, uint256 ethAmount);
     event LiquidityRemoved(address indexed provider, uint256 tokenAmount, uint256 ethAmount);

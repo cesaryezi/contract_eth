@@ -44,7 +44,6 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
     //pid => userAddress => UserInfo
     mapping(uint256 => mapping(address => User)) public user;
 
-
     //合约事件
     event AddPool(address indexed stTokenAddress, uint256 indexed poolWeight, uint256 indexed lastRewardBlock, uint256 minDepositAmount, uint256 unstakeLockedBlocks);
 
@@ -159,7 +158,7 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
             massUpdatePools();
         }
 
-        // 计算当前块的奖励  在 startBlock设置时， block.number已经开始挖矿 几个了
+        // 计算当前块的奖励  startBlock设置早了，block.number还没开始挖矿
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         // 总权重计算
         bool success;
@@ -198,7 +197,9 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
         }
 
         // 更新总权重
-        totalPoolWeight = totalPoolWeight - pools[_pid].poolWeight + _poolWeight;
+        bool success;
+        (success, totalPoolWeight) = (totalPoolWeight - pools[_pid].poolWeight).tryAdd(_poolWeight);
+        require(success, "setPoolWeight: totalPoolWeight overflow");
         pools[_pid].poolWeight = _poolWeight;
 
         emit SetPoolWeight(_pid, _poolWeight, totalPoolWeight);
@@ -220,13 +221,13 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
         require(success, "multiplier overflow");
     }
 
-    //获取用户在具体池子的  待领取的奖励
+    //获取用户在具体池子的  最新待领取的奖励
     function pendingMetaNode(uint256 _pid, address _user) external checkPid(_pid) view returns (uint256) {
         //通过最新区块  获取用户在具体池子  待领取的奖励
         return _pendingMetaNodeByBlockNumber(_pid, _user, block.number);
     }
 
-    //通过最新区块  获取用户在具体池子  待领取的奖励
+    //通过最新区块  获取用户在具体池子  最新待领取的奖励
     function _pendingMetaNodeByBlockNumber(uint256 _pid, address _user, uint256 _blockNumber) internal checkPid(_pid) view returns (uint256) {
         Pool storage pool_ = pools[_pid];
         User storage user_ = user[_pid][_user];
@@ -241,7 +242,6 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
             uint256 multiplier = getMultiplier(pool_.lastRewardBlock, _blockNumber);
             //根据池子权重换算 区间块的奖励：区间块的奖励 * 池子权重 / 总权重
             uint256 MetaNodeForPool = Math.mulDiv(multiplier, pool_.poolWeight, totalPoolWeight);
-
 
             //池子每份代币的奖励 = 池子每份代币的奖励ori + 池子权重中区间块的奖励 / 池子代币供应量
             accMetaNodePerST = accMetaNodePerST + MetaNodeForPool * (1 ether) / stSupply;
@@ -349,7 +349,6 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
         updatePool(_pid);
 
         if (user_.stakeTokenAmount > 0) {//计算用户待领取的代币数量
-            // uint256 accST = user_.stAmount.mulDiv(pool_.accMetaNodePerST, 1 ether);
             (bool success1, uint256 accST) = user_.stakeTokenAmount.tryMul(pool_.accMetaNodePerStake);
             require(success1, "user stAmount mul accMetaNodePerST overflow");
             (success1, accST) = accST.tryDiv(1 ether);
@@ -377,7 +376,6 @@ contract MetaNodeStake is Initializable, PausableUpgradeable, AccessControlUpgra
         pool_.stakeTokenAmount = stTokenAmount;
 
         //更新用户:用户已领取的代币数量
-        // user_.finishedMetaNode = user_.stAmount.mulDiv(pool_.accMetaNodePerST, 1 ether);
         (bool success6, uint256 finishedMetaNode) = user_.stakeTokenAmount.tryMul(pool_.accMetaNodePerStake);
         require(success6, "user stAmount mul accMetaNodePerST overflow");
         (success6, finishedMetaNode) = finishedMetaNode.tryDiv(1 ether);
